@@ -9,6 +9,7 @@ export default function Nav() {
           <a href="#about" className="hover:text-cyan-400 transition-colors">About</a>
           <a href="#skills" className="hover:text-cyan-400 transition-colors">Skills</a>
           <a href="#experience" className="hover:text-cyan-400 transition-colors">Experience</a>
+          <a href="#projects" className="hover:text-cyan-400 transition-colors">Projects</a>
           <a href="#resume" className="hover:text-cyan-400 transition-colors">Resume</a>
         </div>
       </nav>

@@ -1,0 +1,263 @@
+/* ── App layout ─────────────────────────────────────────────────── */
+.tarot-app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #e8d5a3;
+}
+
+.tarot-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.moon-symbols {
+  font-size: 1.2rem;
+  letter-spacing: 0.6rem;
+  color: #7b5cb8;
+  margin-bottom: 0.6rem;
+}
+
+.tarot-title {
+  font-size: 3.5rem;
+  font-weight: normal;
+  letter-spacing: 0.5rem;
+  color: #e8d5a3;
+  text-shadow:
+    0 0 60px rgba(155, 114, 207, 0.35),
+    0 0 20px rgba(201, 162, 39, 0.15);
+}
+
+.tarot-subtitle {
+  color: #8a7aaa;
+  font-style: italic;
+  margin-top: 0.5rem;
+  letter-spacing: 0.05rem;
+}
+
+/* ── Controls ───────────────────────────────────────────────────── */
+.tarot-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  margin-bottom: 3rem;
+}
+
+.draw-btn {
+  background: transparent;
+  border: 1px solid #7b5cb8;
+  color: #e8d5a3;
+  padding: 0.75rem 3rem;
+  font-family: 'Georgia', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+.draw-btn:hover:not(:disabled) {
+  border-color: #c9a227;
+  color: #c9a227;
+  background: rgba(201, 162, 39, 0.06);
+  box-shadow: 0 0 20px rgba(201, 162, 39, 0.12);
+}
+
+.draw-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.tarot-error {
+  text-align: center;
+  color: #c06060;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Spread selector ─────────────────────────────────────────────── */
+.spread-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spread-btn {
+  background: transparent;
+  border: 1px solid #221840;
+  color: #8a7aaa;
+  padding: 0.55rem 1rem;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 120px;
+}
+
+.spread-btn:hover {
+  border-color: #7b5cb8;
+  color: #e8d5a3;
+}
+
+.spread-btn.active {
+  border-color: #c9a227;
+  color: #c9a227;
+  background: rgba(201, 162, 39, 0.05);
+}
+
+.spread-label { font-size: 0.8rem; letter-spacing: 0.03rem; }
+.spread-count { font-size: 0.65rem; opacity: 0.65; }
+
+/* ── Card grid ──────────────────────────────────────────────────── */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 1.2rem;
+}
+
+.card-grid.count-10 {
+  display: grid;
+  grid-template-columns: repeat(5, 170px);
+  justify-content: center;
+}
+
+@media (max-width: 960px) {
+  .card-grid.count-10 { grid-template-columns: repeat(3, 170px); }
+}
+
+@media (max-width: 600px) {
+  .card-grid { gap: 1rem 0.75rem; }
+  .card-grid.count-10 { grid-template-columns: repeat(2, 150px); }
+}
+
+/* ── Card wrapper ───────────────────────────────────────────────── */
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-position-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: #6a5a8a;
+}
+
+/* ── Flip container ───────────────────────────────────────────── */
+.card-inner {
+  width: 160px;
+  height: 280px;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.75s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+/* ── Shared face styles ───────────────────────────────────────── */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ── Back face ────────────────────────────────────────────────── */
+.card-back {
+  background: #130b24;
+  border: 1px solid #2e1f52;
+}
+
+.card-back-fill {
+  width: 100%;
+  height: 100%;
+  background-image:
+    repeating-linear-gradient( 45deg, transparent, transparent 9px, rgba(155,114,207,0.055) 9px, rgba(155,114,207,0.055) 10px),
+    repeating-linear-gradient(-45deg, transparent, transparent 9px, rgba(155,114,207,0.055) 9px, rgba(155,114,207,0.055) 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-back-star {
+  font-size: 2.8rem;
+  color: rgba(155, 114, 207, 0.25);
+  user-select: none;
+}
+
+/* ── Front face ───────────────────────────────────────────────── */
+.card-front {
+  transform: rotateY(180deg);
+  background: #0e0820;
+  border: 1px solid var(--accent, #c9a227);
+  padding: 0.9rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.card-front::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 8px;
+  border: 1px solid var(--accent, #c9a227);
+  opacity: 0.3;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.4rem;
+}
+
+.card-arcana-tag {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: var(--accent, #c9a227);
+}
+
+.card-name {
+  font-size: 1rem;
+  color: #e8d5a3;
+  line-height: 1.3;
+  min-height: 2.6rem;
+}
+
+.card-reversed-tag {
+  font-size: 0.62rem;
+  color: #8a3a3a;
+  letter-spacing: 0.05rem;
+}
+
+.card-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0.1rem 0;
+}
+
+.card-meaning {
+  font-size: 0.73rem;
+  color: #9080b0;
+  font-style: italic;
+  line-height: 1.55;
+  flex: 1;
+}
