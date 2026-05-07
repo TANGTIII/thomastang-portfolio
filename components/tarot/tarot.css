@@ -120,7 +120,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem 1.2rem;
+  gap: 1.8rem 1.4rem;
 }
 
 .card-grid.count-10 {
@@ -134,7 +134,7 @@
 }
 
 @media (max-width: 600px) {
-  .card-grid { gap: 1rem 0.75rem; }
+  .card-grid { gap: 1.2rem 0.8rem; }
   .card-grid.count-10 { grid-template-columns: repeat(2, 150px); }
 }
 
@@ -156,11 +156,11 @@
 /* ── Flip container ───────────────────────────────────────────── */
 .card-inner {
   width: 160px;
-  height: 280px;
+  height: 275px;
   position: relative;
   transform-style: preserve-3d;
-  perspective: 1000px;
-  transition: transform 0.75s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: default;
 }
 
 .card-inner.flipped {
@@ -171,7 +171,7 @@
 .card-face {
   position: absolute;
   inset: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -179,85 +179,90 @@
 
 /* ── Back face ────────────────────────────────────────────────── */
 .card-back {
-  background: #130b24;
   border: 1px solid #2e1f52;
 }
 
-.card-back-fill {
-  width: 100%;
-  height: 100%;
-  background-image:
-    repeating-linear-gradient( 45deg, transparent, transparent 9px, rgba(155,114,207,0.055) 9px, rgba(155,114,207,0.055) 10px),
-    repeating-linear-gradient(-45deg, transparent, transparent 9px, rgba(155,114,207,0.055) 9px, rgba(155,114,207,0.055) 10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-back-star {
-  font-size: 2.8rem;
-  color: rgba(155, 114, 207, 0.25);
-  user-select: none;
+.card-back-img {
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 /* ── Front face ───────────────────────────────────────────────── */
 .card-front {
   transform: rotateY(180deg);
-  background: #0e0820;
   border: 1px solid var(--accent, #c9a227);
-  padding: 0.9rem 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
 }
 
-.card-front::before {
+/* Accent glow on border */
+.card-front::after {
   content: '';
   position: absolute;
   inset: -1px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--accent, #c9a227);
-  opacity: 0.3;
-  filter: blur(4px);
+  opacity: 0.35;
+  filter: blur(5px);
   pointer-events: none;
+  z-index: 3;
 }
 
-.card-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 0.4rem;
+/* ── Card art (image) ─────────────────────────────────────────── */
+.card-art {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.card-arcana-tag {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  color: var(--accent, #c9a227);
+.card-art.reversed .card-art-img {
+  transform: rotate(180deg);
 }
 
-.card-name {
-  font-size: 1rem;
-  color: #e8d5a3;
-  line-height: 1.3;
-  min-height: 2.6rem;
+.card-art-img {
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0s;
+}
+
+/* ── Overlay: name + meaning at the bottom ────────────────────── */
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(8, 4, 18, 0.6) 30%,
+    rgba(8, 4, 18, 0.95) 60%,
+    rgba(8, 4, 18, 1) 100%
+  );
+  padding: 1.8rem 0.7rem 0.75rem;
+  border-radius: 0 0 10px 10px;
 }
 
 .card-reversed-tag {
-  font-size: 0.62rem;
-  color: #8a3a3a;
-  letter-spacing: 0.05rem;
+  font-size: 0.58rem;
+  color: #c06060;
+  letter-spacing: 0.08rem;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
 }
 
-.card-divider {
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin: 0.1rem 0;
+.card-name {
+  font-size: 0.82rem;
+  color: #e8d5a3;
+  line-height: 1.25;
+  margin-bottom: 0.3rem;
+  font-weight: normal;
 }
 
 .card-meaning {
-  font-size: 0.73rem;
+  font-size: 0.64rem;
   color: #9080b0;
   font-style: italic;
-  line-height: 1.55;
-  flex: 1;
+  line-height: 1.45;
 }
