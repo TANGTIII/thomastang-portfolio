@@ -59,7 +59,25 @@ export interface CardData {
   isReversed: boolean
 }
 
-export default function TarotCard({ card, position, index }: { card: CardData; position: string; index: number }) {
+export default function TarotCard({
+  card,
+  position,
+  index,
+  crossing = false,
+  isHovered = false,
+  isAnyHovered = false,
+  onHoverEnter,
+  onHoverLeave,
+}: {
+  card: CardData
+  position: string
+  index: number
+  crossing?: boolean
+  isHovered?: boolean
+  isAnyHovered?: boolean
+  onHoverEnter?: () => void
+  onHoverLeave?: () => void
+}) {
   const [flipped, setFlipped] = useState(false)
 
   useEffect(() => {
@@ -72,10 +90,23 @@ export default function TarotCard({ card, position, index }: { card: CardData; p
   const imageSrc = getCardImage(card.name, card.arcana, card.suit)
 
   return (
-    <div className="card-wrapper">
+    <div
+      className="card-wrapper"
+      style={{
+        position: 'relative',
+        zIndex: isHovered ? 50 : undefined,
+        transform: isHovered ? 'scale(1.15)' : undefined,
+        transformOrigin: 'center center',
+        opacity: isAnyHovered && !isHovered ? 0.4 : 1,
+        transition: 'transform 0.2s ease, opacity 0.2s ease',
+        cursor: 'pointer',
+      }}
+      onMouseEnter={onHoverEnter}
+      onMouseLeave={onHoverLeave}
+    >
       <p className="card-position-label">{position}</p>
 
-      <div className={`card-inner${flipped ? ' flipped' : ''}`}>
+      <div className={`card-inner${flipped ? ' flipped' : ''}${crossing ? ' crossing' : ''}`}>
 
         {/* ── Back ── */}
         <div className="card-face card-back">

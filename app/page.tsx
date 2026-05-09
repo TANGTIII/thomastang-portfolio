@@ -7,7 +7,6 @@ import Education from "@/components/Education";
 import Projects from "@/components/Projects";
 import ResumeDownload from "@/components/ResumeDownload";
 import Footer from "@/components/Footer";
-import TarotSection from "./components/TarotSection";
 
 export default function Home() {
   return (
@@ -20,7 +19,6 @@ export default function Home() {
         <Experience />
         <Education />
         <Projects />
-        <TarotSection />
         <ResumeDownload />
       </main>
       <Footer />
