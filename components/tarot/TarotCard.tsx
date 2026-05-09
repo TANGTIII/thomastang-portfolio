@@ -64,6 +64,7 @@ export default function TarotCard({
   position,
   index,
   crossing = false,
+  hidePosLabel = false,
   isHovered = false,
   isAnyHovered = false,
   onHoverEnter,
@@ -73,6 +74,7 @@ export default function TarotCard({
   position: string
   index: number
   crossing?: boolean
+  hidePosLabel?: boolean
   isHovered?: boolean
   isAnyHovered?: boolean
   onHoverEnter?: () => void
@@ -104,7 +106,7 @@ export default function TarotCard({
       onMouseEnter={onHoverEnter}
       onMouseLeave={onHoverLeave}
     >
-      <p className="card-position-label">{position}</p>
+      {!hidePosLabel && <p className="card-position-label">{position}</p>}
 
       <div className={`card-inner${flipped ? ' flipped' : ''}${crossing ? ' crossing' : ''}`}>
 

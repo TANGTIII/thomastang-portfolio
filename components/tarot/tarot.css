@@ -130,13 +130,31 @@
 /* ── Celtic Cross layout ─────────────────────────────────────────── */
 .celtic-cross-container {
   position: relative;
-  width: 732px;
-  height: 1148px;
+  /* width:  staff-right (610+160=770) */
+  /* height: self-bottom (1030+304=1334) */
+  width: 770px;
+  height: 1340px;
   margin: 0 auto;
 }
 
 .celtic-cross-slot {
   position: absolute;
+}
+
+/* Challenge position label rendered separately below the rotated card */
+.celtic-challenge-label {
+  position: absolute;
+  /* horizontally centered over the challenge hit region (left=138, width=275) */
+  left: 138px;
+  width: 275px;
+  /* top = CHALLENGE_HIT.bottom + 6px = 667 + 6 */
+  top: 673px;
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: #6a5a8a;
+  pointer-events: none;
 }
 
 /* Crossing card (position 1 / Challenge): rotated 90° around card center */

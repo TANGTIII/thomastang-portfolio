@@ -34,21 +34,31 @@ const SPREADS: Record<string, SpreadDef> = {
   },
 }
 
-// Celtic Cross absolute positions [left, top] in px within a 732×1148 container.
-// The cross section is vertically centered alongside the 4-card staff column.
-// Index matches SPREADS['celtic-cross'].positions order.
+// Celtic Cross absolute positions [left, top] in px.
+// Card-wrapper dimensions: 160px wide, ~304px tall (21px label + 8px gap + 275px card).
+// Spacing is sized so labels never overlap adjacent cards.
 const CELTIC_POSITIONS: Array<[number, number]> = [
-  [176, 437],  // 0: Present      — cross center
-  [176, 437],  // 1: Challenge    — crossing card (rotated 90°, same center)
-  [0,   437],  // 2: Past         — cross left
-  [352, 437],  // 3: Future       — cross right
-  [176, 146],  // 4: Crown        — cross top
-  [176, 728],  // 5: Foundation   — cross bottom
-  [572, 873],  // 6: Self         — staff row 4 (bottom)
-  [572, 582],  // 7: Environment  — staff row 3
-  [572, 291],  // 8: Hopes & Fears — staff row 2
-  [572, 0  ],  // 9: Outcome      — staff row 1 (top)
+  [195, 420],  // 0: Present       — cross center
+  [195, 420],  // 1: Challenge     — same center, card rotated 90° via CSS
+  [0,   420],  // 2: Past          — cross left  (40px gap from Present)
+  [380, 420],  // 3: Future        — cross right (40px gap from Present)
+  [195, 86 ],  // 4: Crown         — above Present (30px gap between Crown bottom & Present label)
+  [195, 754],  // 5: Foundation    — below Present (30px gap between Present bottom & Foundation label)
+  [610, 1030], // 6: Self          — staff row 4 (bottom)
+  [610, 700],  // 7: Environment   — staff row 3
+  [610, 370],  // 8: Hopes & Fears — staff row 2
+  [610, 40 ],  // 9: Outcome       — staff row 1 (top, 40px from container top)
 ]
+
+// Card-wrapper hit-box dimensions used by the container-level mouse tracker.
+const CARD_W = 160
+const CARD_H = 304   // label (~21px) + gap (~8px) + card-inner (275px)
+
+// The Challenge card (index 1) is rotated 90°. Its visual hit region is a
+// 275×160 rectangle centered on the same point as the Present card-inner center.
+//   center-x = 195 + 80 = 275
+//   center-y = 420 + 21 + 8 + 137.5 ≈ 587
+const CHALLENGE_HIT = { left: 138, top: 507, right: 413, bottom: 667 }
 
 export default function TarotApp() {
   const [spreadKey, setSpreadKey] = useState('three-card')
@@ -88,6 +98,35 @@ export default function TarotApp() {
   const hoveredCard = hoveredIndex !== null ? cards[hoveredIndex] : null
   const hoveredPosition = hoveredIndex !== null ? SPREADS[spreadKey].positions[hoveredIndex] : null
 
+  // Container-level mouse tracking for Celtic Cross.
+  // Handles both the Present card and the rotated Challenge card cleanly,
+  // since Challenge's visual hit area partially overlaps Present's slot.
+  const handleCelticMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    // Challenge visual hit region takes priority over the Present slot
+    if (
+      x >= CHALLENGE_HIT.left && x <= CHALLENGE_HIT.right &&
+      y >= CHALLENGE_HIT.top  && y <= CHALLENGE_HIT.bottom
+    ) {
+      if (hoveredIndex !== 1) setHoveredIndex(1)
+      return
+    }
+
+    for (let i = 0; i < cards.length; i++) {
+      if (i === 1) continue  // Challenge handled above
+      const [cx, cy] = CELTIC_POSITIONS[i]
+      if (x >= cx && x <= cx + CARD_W && y >= cy && y <= cy + CARD_H) {
+        if (hoveredIndex !== i) setHoveredIndex(i)
+        return
+      }
+    }
+
+    if (hoveredIndex !== null) setHoveredIndex(null)
+  }
+
   return (
     <div className="tarot-app">
       {/* Page-wide blur overlay */}
@@ -125,7 +164,12 @@ export default function TarotApp() {
         {cards.length > 0 && (
           <>
             {isCelticCross ? (
-              <div key={drawId} className="celtic-cross-container">
+              <div
+                key={drawId}
+                className="celtic-cross-container"
+                onMouseMove={handleCelticMove}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
                 {cards.map((card, i) => (
                   <div
                     key={`${drawId}-${card.id}`}
@@ -137,13 +181,19 @@ export default function TarotApp() {
                       position={SPREADS['celtic-cross'].positions[i]}
                       index={i}
                       crossing={i === 1}
+                      hidePosLabel={i === 1}
                       isHovered={hoveredIndex === i}
                       isAnyHovered={hoveredIndex !== null}
-                      onHoverEnter={() => setHoveredIndex(i)}
-                      onHoverLeave={() => setHoveredIndex(null)}
                     />
                   </div>
                 ))}
+
+                {/* Challenge label rendered separately below its visual hit region */}
+                {cards.length === 10 && (
+                  <div className="celtic-challenge-label">
+                    Challenge
+                  </div>
+                )}
               </div>
             ) : (
               <div key={drawId} className={`card-grid count-${cards.length}`}>
