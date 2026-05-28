@@ -19,7 +19,7 @@ const projects = [
     name: 'Blackjack Card Counting Trainer',
     description: 'Terminal blackjack game with real-time Hi-Lo card counting. Tracks running and true count across a configurable multi-deck shoe, with basic strategy hints and an interactive count quiz mode.',
     tags: ['Python', 'CLI', 'Card Counting'],
-    href: 'https://github.com/TANGTIII/blackjack-card-counting',
+    href: 'https://tangtiii.github.io/blackjack-card-counting/',
     internal: false,
   },
 ]
